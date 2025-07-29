@@ -89,55 +89,101 @@ export default function MusicRevenueSimulator() {
     return option ? option.label : contractValue;
   };
 
+  const drawLogo = (doc, x, y) => {
+    // Texte JOE simple
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(255, 255, 255);
+    doc.text('JOE', x + 10, y + 12);
+    
+    // Ligne décorative simple
+    doc.setDrawColor(255, 255, 255);
+    doc.setLineWidth(1);
+    doc.line(x + 8, y + 14, x + 25, y + 14);
+  };
+
   const exportToPDF = () => {
     const doc = new jsPDF();
     
-    // Titre
-    doc.setFontSize(20);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Simulateur de Revenus Musicaux', 20, 30);
+    // En-tête avec branding
+    doc.setFillColor(0, 0, 0); 
+    doc.rect(0, 0, 210, 30, 'F');
     
-    // Date
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Généré le: ${new Date().toLocaleDateString('fr-FR')}`, 20, 45);
+    // Ajouter le logo JOE depuis le fichier public
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
     
-    // Informations de base
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Paramètres', 20, 65);
+    img.onload = () => {
+      // Ajouter l'image au PDF
+      doc.addImage(img, 'JPEG', 10, 10, 30, 15);
+      
+      // Titre principal
+      doc.setFontSize(24);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(255, 255, 255);
+      doc.text('Simulateur de Revenus Musicaux', 50, 20);
+      
+      // Retour au texte noir pour le contenu
+      doc.setTextColor(0, 0, 0);
+      
+      // Date
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Généré le: ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR')}`, 20, 65);
+      
+      // Informations de base
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Données de simulation', 20, 85);
+      
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Nom de l'artiste: ${artistName || 'Non spécifié'}`, 20, 100);
+      doc.text(`Streams Spotify: ${streams.toLocaleString('fr-FR')}`, 20, 110);
+      doc.text(`Type de contrat: ${getContractLabel(contract)}`, 20, 125);
+      doc.text(`Nombre de concerts: ${concerts}`, 20, 140);
+      doc.text(`Cachet brut par concert: ${cachetBrut.toLocaleString('fr-FR')} €`, 20, 155);
+      
+      // Calculs
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Revenus estimés', 20, 175);
+      
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Revenus Spotify: ${getSpotifyRevenue().toFixed(2)} €`, 20, 190);
+      doc.text(`Revenus tournée: ${getTourRevenue().toFixed(2)} €`, 20, 205);
+      
+      // Total avec mise en forme
+      doc.setFontSize(18);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(34, 197, 94); // Vert
+      doc.text(`Total estimé: ${totalRevenue.toFixed(2)} €`, 20, 225);
+      
+      // Retour au texte noir
+      doc.setTextColor(0, 0, 0);
+      
+      // Note de bas de page
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'italic');
+      doc.text('Ce simulateur est à titre indicatif et ne remplace pas un conseil juridique ou fiscal.', 20, 245);
+      doc.text('Les taux de rémunération peuvent varier en fonction des contrats et des conditions commerciales.', 20, 255);
+      
+      // Signature et branding en bas
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      doc.text('---', 20, 270);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Généré par JoeLeDev - Développeur Full Stack', 20, 280);
+      doc.text('Portfolio: https://portfolio-dev-2025.vercel.app/  | GitHub: @JoeLeDev', 20, 285);
+      
+      // Sauvegarde du PDF
+      doc.save('simulateur-revenus-musicaux.pdf');
+    };
     
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Nom de l'artiste: ${artistName}`, 20, 75);
-    doc.text(`Streams Spotify: ${streams.toLocaleString('fr-FR')}`, 20, 80);
-    doc.text(`Type de contrat: ${getContractLabel(contract)}`, 20, 95);
-    doc.text(`Nombre de concerts: ${concerts}`, 20, 110);
-    doc.text(`Cachet brut par concert: ${cachetBrut.toLocaleString('fr-FR')} €`, 20, 125);
-    
-    // Calculs
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Revenus estimés', 20, 150);
-    
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Revenus Spotify: ${getSpotifyRevenue().toFixed(2)} €`, 20, 165);
-    doc.text(`Revenus tournée: ${getTourRevenue().toFixed(2)} €`, 20, 180);
-    
-    // Total
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'bold');
-    doc.text(`Total estimé: ${totalRevenue.toFixed(2)} €`, 20, 200);
-    
-    // Note de bas de page
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'italic');
-    doc.text('Ce simulateur est à titre indicatif et ne remplace pas un conseil juridique ou fiscal.', 20, 220);
-    doc.text('Les taux de rémunération peuvent varier en fonction des contrats et des conditions commerciales.', 20, 230);
-    
-    // Sauvegarde du PDF
-    doc.save('simulateur-revenus-musicaux.pdf');
+    // Charger l'image depuis le dossier public
+    img.src = '/joe.jpg';
   };
 
 
@@ -239,6 +285,7 @@ export default function MusicRevenueSimulator() {
         </button>
         <button className="bg-green-600 text-white px-4 py-2 rounded-md w-full sm:w-auto flex items-center justify-center" onClick={exportToPDF}>
           <FileText className="w-4 h-4 mr-2" /> Exporter en PDF
+          
         </button>
         </div>
         <div className="mt-6 w-full">
