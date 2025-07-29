@@ -35,7 +35,7 @@ export default function MusicRevenueSimulator() {
   const [streams, setStreams] = useState(0);
   const [contract, setContract] = useState('major');
   const [showContracts, setShowContracts] = useState(false);
-
+  const [artistName, setArtistName] = useState('');
   // Tournée personnalisée
   const [concerts, setConcerts] = useState(0);
   const [cachetBrut, setCachetBrut] = useState(0);
@@ -100,6 +100,7 @@ export default function MusicRevenueSimulator() {
     
     doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
+    doc.text(`Nom de l'artiste: ${artistName}`, 20, 75);
     doc.text(`Streams Spotify: ${streams.toLocaleString('fr-FR')}`, 20, 80);
     doc.text(`Type de contrat: ${getContractLabel(contract)}`, 20, 95);
     doc.text(`Nombre de concerts: ${concerts}`, 20, 110);
@@ -140,12 +141,20 @@ export default function MusicRevenueSimulator() {
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Simulateur de Revenus Musicaux</h1>
       </div>
 
+      <label className="block mb-2 font-semibold">Nom de l'artiste</label>
+      <input
+      type='text'
+      className="w-full p-2 rounded-lg border dark:bg-gray-800 mb-4"
+        value={artistName}
+      placeholder="Nom de l'artiste"
+      onChange={(e) => setArtistName(e.target.value)}
+      />
       <label className="block mb-2 font-semibold">Nombre de streams Spotify</label>
       <input
         type="number"
         className="w-full p-2 rounded-lg border dark:bg-gray-800"
         value={streams}
-        placeholder="Veuillez entrer le nombre d'auditeurs sur Spotify de l'artiste"
+        placeholder="Nombre de streams Spotify"
         onChange={(e) => setStreams(parseInt(e.target.value))}
         min={0}
         />
@@ -213,31 +222,13 @@ export default function MusicRevenueSimulator() {
           Total estimé : <span className="text-green-500">{totalRevenue.toFixed(2)} €</span>
         </p>
         </div>
-        <div className="flex items-center gap-2 mt-5">
+        <div className="flex flex-col sm:flex-row items-center justify-start gap-2 mt-5">
 
-        <button className="bg-gray-500 text-white px-4 py-2 rounded-md" onClick={() => window.location.reload()}>
+        <button className="bg-gray-500 text-white px-4 py-2 rounded-md w-full sm:w-auto" onClick={() => window.location.reload()}>
           Reinitialiser les valeurs
         </button>
-            <button className="bg-gray-500 text-white px-4 py-2 rounded-md" onClick={() => {
-                const data = {
-                    streams,
-                    contract,
-                    concerts,
-                    cachetBrut,
-                    totalRevenue
-                };
-                const json = JSON.stringify(data);
-                const blob = new Blob([json], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'data.json';
-                a.click();
-                URL.revokeObjectURL(url);
-            }}>
-        Exporter les données</button>
-        <button className="bg-blue-500 text-white px-4 py-2 rounded-md" onClick={exportToPDF}>
-          <FileText className="w-5 h-5 mr-2" /> Exporter en PDF
+        <button className="bg-green-600 text-white px-4 py-2 rounded-md w-full sm:w-auto flex items-center justify-center" onClick={exportToPDF}>
+          <FileText className="w-4 h-4 mr-2" /> Exporter en PDF
         </button>
         </div>
     </div>
