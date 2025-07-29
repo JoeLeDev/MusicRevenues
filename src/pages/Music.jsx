@@ -12,6 +12,7 @@ import {
   FileText
 } from 'lucide-react';
 import jsPDF from 'jspdf';
+import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 
 const contractOptions = [
   {
@@ -30,6 +31,8 @@ const contractOptions = [
     icon: <Rocket className="w-4 h-4 text-green-500" />,
   },
 ];
+
+
 
 export default function MusicRevenueSimulator() {
   const [streams, setStreams] = useState(0);
@@ -74,6 +77,12 @@ export default function MusicRevenueSimulator() {
   };
 
   const totalRevenue = getSpotifyRevenue() + getOtherRevenues();
+
+  // Données pour le graphique camembert
+  const pieData = [
+    { name: 'Spotify', value: getSpotifyRevenue(), color: '#1ed760' },
+    { name: 'Tournée', value: getTourRevenue(), color: '#6366f1' },
+  ];
 
   const getContractLabel = (contractValue) => {
     const option = contractOptions.find(opt => opt.value === contractValue);
@@ -130,6 +139,7 @@ export default function MusicRevenueSimulator() {
     // Sauvegarde du PDF
     doc.save('simulateur-revenus-musicaux.pdf');
   };
+
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center flex-col dark:bg-gray-900 ">
@@ -231,18 +241,40 @@ export default function MusicRevenueSimulator() {
           <FileText className="w-4 h-4 mr-2" /> Exporter en PDF
         </button>
         </div>
+        <div className="mt-6 w-full">
+          <h3 className="text-lg font-semibold mb-4 text-center">Répartition des revenus</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie data={pieData} dataKey="value" 
+              nameKey="name" 
+              cx="50%" 
+              cy="50%" 
+              outerRadius={80} 
+              fill="#8884d8" 
+              label={({ name, value }) => `${name}: ${value.toFixed(2)} €`}
+              >
+                {pieData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+            </ResponsiveContainer>
+        </div>
     </div>
     <p className="text-sm text-gray-500 sm:text-lg sm:w-2/3 text-center dark:text-white mt-10 2xl:w-1/2">
     Ce simulateur est à titre indicatif et ne remplace pas un conseil juridique ou fiscal. Les taux de rémunération peuvent varier en fonction des contrats, des régions et des conditions commerciales.
     Les revenus SACEM ne sont pas intégrés dans ce simulateur car ils dépendent :
     <ul className="list-disc list-inside">
-      <li>du rôle de l’artiste (auteur/compositeur)</li>
-      <li>de l’éditeur éventuel</li>
+      <li>du rôle de l'artiste (auteur/compositeur)</li>
+      <li>de l'éditeur éventuel</li>
       <li>des titres réellement monétisés</li>
       <li>des déclarations aux organismes</li>
     </ul>
     <p>La SACEM reverse en moyenne 300–800 € par million de streams pour un auteur-compositeur.</p>
     </p>
 </div>
+
   );
 }
