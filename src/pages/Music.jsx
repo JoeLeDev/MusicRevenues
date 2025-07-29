@@ -91,10 +91,13 @@ export default function MusicRevenueSimulator() {
   const totalRevenue = getSpotifyRevenue() + getOtherRevenues();
 
   return (
-    <div className="max-w-xl mx-auto p-6 rounded-2xl shadow-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center flex-col dark:bg-gray-900">
+       <h1 className="text-2xl text-gray-900  font-bold sm:text-4xl dark:text-white">Simulateur de Revenus Musicaux</h1>
+       <p className="text-sm text-gray-500 sm:text-lg sm:w-2/3 text-center dark:text-white">Simulez vos revenus musicaux en fonction de votre contrat, de vos streams Spotify, de vos concerts et de vos frais.</p>
+    <div className="max-w-xl mx-auto mt-10 justify-center p-6 rounded-2xl shadow-xl  text-gray-900 border-5 border-gray-200 dark:bg-gray-800 dark:text-white">
       <div className="flex items-center gap-2 mb-4">
-        <Music className="w-6 h-6" />
-        <h1 className="text-2xl font-bold">Simulateur de Revenus Musicaux</h1>
+        <Music className="w-6 h-6 text-gray-900 dark:text-white" />
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Simulateur de Revenus Musicaux</h1>
       </div>
 
       <label className="block mb-2 font-semibold">Nombre de streams Spotify</label>
@@ -104,20 +107,20 @@ export default function MusicRevenueSimulator() {
         value={streams}
         onChange={(e) => setStreams(parseInt(e.target.value))}
         min={0}
-      />
+        />
 
       <label className="block mt-4 mb-2 font-semibold">Type de contrat</label>
       <button
         onClick={() => setShowContracts(!showContracts)}
         className="md:hidden flex items-center gap-2 mb-2 text-sm text-blue-600"
-      >
+        >
         {showContracts ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
         {showContracts ? 'Fermer les options' : 'Afficher les options'}
       </button>
 
       <div className={`w-full p-2 rounded-lg border dark:bg-gray-800 space-y-1 ${showContracts ? 'block' : 'hidden'} md:block`}>
         {contractOptions.map((option) => (
-          <label key={option.value} className="flex items-center gap-2 cursor-pointer">
+            <label key={option.value} className="flex items-center gap-2 cursor-pointer">
             <input
               type="radio"
               name="contract"
@@ -125,7 +128,7 @@ export default function MusicRevenueSimulator() {
               checked={contract === option.value}
               onChange={() => setContract(option.value)}
               className="accent-blue-500"
-            />
+              />
             {option.icon}
             <span>{option.label}</span>
           </label>
@@ -143,7 +146,7 @@ export default function MusicRevenueSimulator() {
               value={concerts}
               onChange={(e) => setConcerts(parseInt(e.target.value))}
               min={0}
-            />
+              />
           </div>
           <div>
             <label className="text-sm">Cachet brut par concert (€)</label>
@@ -153,7 +156,7 @@ export default function MusicRevenueSimulator() {
               value={cachetBrut}
               onChange={(e) => setCachetBrut(parseInt(e.target.value))}
               min={0}
-            />
+              />
           </div>
           <div>
             <label className="text-sm">% de frais (logistique, équipe…)</label>
@@ -164,7 +167,7 @@ export default function MusicRevenueSimulator() {
               onChange={(e) => setFraisPourcentage(parseInt(e.target.value))}
               min={0}
               max={100}
-            />
+              />
           </div>
         </div>
       </div>
@@ -181,5 +184,6 @@ export default function MusicRevenueSimulator() {
         </p>
       </div>
     </div>
+</div>
   );
 }
