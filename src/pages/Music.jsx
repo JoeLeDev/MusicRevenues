@@ -35,6 +35,11 @@ export default function MusicRevenueSimulator() {
   const [contract, setContract] = useState('auto');
   const [showContracts, setShowContracts] = useState(false);
 
+  // Tournée personnalisée
+  const [concerts, setConcerts] = useState(10);
+  const [cachetBrut, setCachetBrut] = useState(1500);
+  const [fraisPourcentage, setFraisPourcentage] = useState(30);
+
   const getSpotifyRevenue = () => {
     const revenue = 3500 * (streams / 1000000);
     switch (contract) {
@@ -50,33 +55,37 @@ export default function MusicRevenueSimulator() {
   };
 
   const getTourRevenue = () => {
-    return 10000;
+    const netPerConcert = cachetBrut * (1 - fraisPourcentage / 100);
+    const totalNet = concerts * netPerConcert;
+
+    switch (contract) {
+      case 'major':
+        return totalNet * 0.12;
+      case 'indie':
+      case 'auto':
+        return totalNet;
+      default:
+        return 0;
+    }
   };
-  switch (contract) {
-    case 'major':
-      return 10000 * 0.12;
-    case 'indie':
-      return 10000;
-    case 'auto':
-      return 10000;
-  }
 
   const getSacemRevenue = () => {
-    return 600;
+    switch (contract) {
+      case 'major':
+        return 600 * 0.12;
+      case 'indie':
+      case 'auto':
+        return 600;
+      default:
+        return 0;
+    }
   };
-  switch (contract) {
-    case 'major':
-      return 600 * 0.12;
-    case 'indie':
-      return 600;
-    case 'auto':
-      return 600;
-  }
 
   const getOtherRevenues = () => {
     const tour = getTourRevenue();
     const sacem = getSacemRevenue();
-    return tour + sacem;
+    const merch = contract === 'major' ? 500 : 1000;
+    return tour + sacem + merch;
   };
 
   const totalRevenue = getSpotifyRevenue() + getOtherRevenues();
@@ -98,8 +107,6 @@ export default function MusicRevenueSimulator() {
       />
 
       <label className="block mt-4 mb-2 font-semibold">Type de contrat</label>
-
-      {/* Mobile toggle */}
       <button
         onClick={() => setShowContracts(!showContracts)}
         className="md:hidden flex items-center gap-2 mb-2 text-sm text-blue-600"
@@ -122,14 +129,51 @@ export default function MusicRevenueSimulator() {
             {option.icon}
             <span>{option.label}</span>
           </label>
-
         ))}
       </div>
 
       <div className="mt-6 space-y-2">
+        <label className="block font-semibold">🎤 Tournée personnalisée</label>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="text-sm">Nombre de concerts</label>
+            <input
+              type="number"
+              className="w-full p-2 rounded-lg border dark:bg-gray-800"
+              value={concerts}
+              onChange={(e) => setConcerts(parseInt(e.target.value))}
+              min={0}
+            />
+          </div>
+          <div>
+            <label className="text-sm">Cachet brut par concert (€)</label>
+            <input
+              type="number"
+              className="w-full p-2 rounded-lg border dark:bg-gray-800"
+              value={cachetBrut}
+              onChange={(e) => setCachetBrut(parseInt(e.target.value))}
+              min={0}
+            />
+          </div>
+          <div>
+            <label className="text-sm">% de frais (logistique, équipe…)</label>
+            <input
+              type="number"
+              className="w-full p-2 rounded-lg border dark:bg-gray-800"
+              value={fraisPourcentage}
+              onChange={(e) => setFraisPourcentage(parseInt(e.target.value))}
+              min={0}
+              max={100}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6 space-y-2">
         <p className="flex items-center gap-2"><Wallet className="w-5 h-5" /> Revenus Spotify : <strong>{getSpotifyRevenue().toFixed(2)} €</strong></p>
-        <p className="flex items-center gap-2"><Mic className="w-5 h-5" /> Tournée : <strong>10 000 €</strong></p>
-        <p className="flex items-center gap-2"><ScrollText className="w-5 h-5" /> SACEM : <strong>600 €</strong></p>
+        <p className="flex items-center gap-2"><Mic className="w-5 h-5" /> Tournée : <strong>{getTourRevenue().toFixed(2)} €</strong></p>
+        <p className="flex items-center gap-2"><ScrollText className="w-5 h-5" /> SACEM : <strong>{getSacemRevenue().toFixed(2)} €</strong></p>
+        <p className="flex items-center gap-2"><Shirt className="w-5 h-5" /> Merchandising : <strong>{contract === 'major' ? '500' : '1000'} €</strong></p>
         <hr className="my-4" />
         <p className="text-xl font-bold flex items-center gap-2">
           <Wallet className="w-6 h-6 text-green-500" />
