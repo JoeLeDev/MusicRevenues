@@ -188,11 +188,13 @@ export default function MusicRevenueSimulator() {
 
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center flex-col dark:bg-gray-900 ">
+    <div className=" bg-gray-100 flex items-center justify-center flex-col dark:bg-gray-900 min-h-screen lg:overflow-y-auto">
+        <div className="w-full flex flex-col items-center justify-center my-20">
+
        <h1 className="text-2xl text-gray-900  font-bold sm:text-4xl dark:text-white">Simulateur de Revenus Musicaux</h1>
-       <p className="text-sm text-gray-500 sm:text-lg sm:w-2/3 text-center dark:text-white">Simulez vos revenus musicaux en fonction de votre contrat, de vos streams Spotify, de vos concerts et de vos frais.</p>
-    <div className="max-w-xl mx-auto mt-10 justify-center p-6 rounded-2xl shadow-xl  text-gray-900 border-5 border-gray-200 dark:bg-gray-800 dark:text-white">
-      <div className="flex items-center gap-2 mb-4">
+       <p className="text-sm text-gray-500 sm:text-lg sm:w-2/3 text-center dark:text-white">Simulez les revenus musicaux de votre artiste en fonction de son contrat, de ses streams Spotify, de ses concerts.</p>
+    <div className="max-w-xl mx-auto mt-10 justify-center p-6 rounded-2xl shadow-xl  text-gray-900 border-5 border-gray-200 dark:bg-gray-800 dark:text-white lg:max-h-screen lg:overflow-y-auto">
+      <div className="flex items-center gap-2 mb-4 lg:mb-10">
         <Music className="w-6 h-6 text-gray-900 dark:text-white" />
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Simulateur de Revenus Musicaux</h1>
       </div>
@@ -201,7 +203,7 @@ export default function MusicRevenueSimulator() {
       <input
       type='text'
       className="w-full p-2 rounded-lg border dark:bg-gray-800 mb-4"
-        value={artistName}
+      value={artistName}
       placeholder="Nom de l'artiste"
       onChange={(e) => setArtistName(e.target.value)}
       />
@@ -301,7 +303,7 @@ export default function MusicRevenueSimulator() {
               label={({ name, value }) => `${name}: ${value.toFixed(2)} €`}
               >
                 {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
+                    <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
               <Tooltip />
@@ -321,7 +323,9 @@ export default function MusicRevenueSimulator() {
     </ul>
     <p>La SACEM reverse en moyenne 300–800 € par million de streams pour un auteur-compositeur.</p>
     </p>
-</div>
+        </div>
+    </div>
+
 
   );
 }
