@@ -139,10 +139,10 @@ export default function MusicRevenueSimulator() {
       doc.setFontSize(12);
       doc.setFont('helvetica', 'normal');
       doc.text(`Nom de l'artiste: ${artistName || 'Non spécifié'}`, 20, 100);
-      doc.text(`Streams Spotify: ${streams.toLocaleString('fr-FR')}`, 20, 110);
+      doc.text(`Streams Spotify: ${streams.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}`, 20, 110);
       doc.text(`Type de contrat: ${getContractLabel(contract)}`, 20, 125);
       doc.text(`Nombre de concerts: ${concerts}`, 20, 140);
-      doc.text(`Cachet brut par concert: ${cachetBrut.toLocaleString('fr-FR')} €`, 20, 155);
+      doc.text(`Cachet brut par concert: ${cachetBrut.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} €`, 20, 155);
       
       // Calculs
       doc.setFontSize(16);
