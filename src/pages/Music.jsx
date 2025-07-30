@@ -35,13 +35,13 @@ const contractOptions = [
 
 
 export default function MusicRevenueSimulator() {
-  const [streams, setStreams] = useState(0);
+  const [streams, setStreams] = useState("");
   const [contract, setContract] = useState('major');
   const [showContracts, setShowContracts] = useState(false);
   const [artistName, setArtistName] = useState('');
   // Tournée personnalisée
-  const [concerts, setConcerts] = useState(0);
-  const [cachetBrut, setCachetBrut] = useState(0);
+  const [concerts, setConcerts] = useState("");
+  const [cachetBrut, setCachetBrut] = useState("");
 
   const getSpotifyRevenue = () => {
     const revenue = 3500 * (streams / 1000000);
@@ -188,12 +188,12 @@ export default function MusicRevenueSimulator() {
 
 
   return (
-    <div className=" bg-gray-100 flex items-center justify-center flex-col dark:bg-gray-900 min-h-screen lg:overflow-y-auto">
+    <div className=" bg-gray-100 flex items-center justify-center flex-col dark:bg-gray-900 min-h-screen lg:overflow-y-auto sm:overflow-y-auto">
         <div className="w-full flex flex-col items-center justify-center my-20">
 
        <h1 className="text-2xl text-gray-900  font-bold sm:text-4xl dark:text-white">Simulateur de Revenus Musicaux</h1>
        <p className="text-sm text-gray-500 sm:text-lg sm:w-2/3 text-center dark:text-white">Simulez les revenus musicaux de votre artiste en fonction de son contrat, de ses streams Spotify, de ses concerts.</p>
-    <div className="max-w-xl mx-auto mt-10 justify-center p-6 rounded-2xl shadow-xl  text-gray-900 border-5 border-gray-200 dark:bg-gray-800 dark:text-white lg:max-h-screen lg:overflow-y-auto">
+    <div className="max-w-xl mx-auto mt-10 justify-center p-6 rounded-2xl shadow-xl  text-gray-900 border-5 border-gray-200 dark:bg-gray-800 dark:text-white lg:max-h-screen lg:overflow-y-auto sm:overflow-y-auto">
       <div className="flex items-center gap-2 mb-4 lg:mb-10">
         <Music className="w-6 h-6 text-gray-900 dark:text-white" />
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Simulateur de Revenus Musicaux</h1>
